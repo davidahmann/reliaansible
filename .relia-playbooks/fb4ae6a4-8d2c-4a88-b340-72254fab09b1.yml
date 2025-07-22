@@ -1,0 +1,8 @@
+---
+- name: Simulated playbook for ansible.builtin.user
+  hosts: all
+  tasks:
+  - name: Install required packages
+    ansible.builtin.user:
+      path: /tmp/example
+      state: present

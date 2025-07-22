@@ -1,0 +1,432 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Application Metrics -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Application Performance Metrics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.uptime_seconds | int }}</span>
+                                <div class="label">Uptime (seconds)</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.requests.total }}</span>
+                                <div class="label">Total Requests</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ "%.2f"|format(metrics.requests_per_minute) }}</span>
+                                <div class="label">Requests/Minute</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.llm.calls }}</span>
+                                <div class="label">LLM API Calls</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Request Statistics -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Request by Endpoint</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="requestByEndpointChart" width="100%" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Request by Status</h5>
+            </div>
+            <div class="card-body">
+                <canvas id="requestByStatusChart" width="100%" height="300"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- LLM Metrics -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">LLM Service Metrics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.llm.calls }}</span>
+                                <div class="label">Total Calls</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.llm.tokens }}</span>
+                                <div class="label">Total Tokens</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.llm.cache_hits }}</span>
+                                <div class="label">Cache Hits</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ "%.2f"|format(metrics.metrics.llm.cache_hits / (metrics.metrics.llm.cache_hits + metrics.metrics.llm.cache_misses) * 100) if (metrics.metrics.llm.cache_hits + metrics.metrics.llm.cache_misses) > 0 else 0 }}%</span>
+                                <div class="label">Cache Hit Rate</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if llm_stats %}
+                <div class="mt-4">
+                    <h6>Provider Usage</h6>
+                    <canvas id="llmProviderChart" width="100%" height="200"></canvas>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Task Metrics -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Task Queue Metrics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.tasks.created }}</span>
+                                <div class="label">Created Tasks</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.tasks.completed }}</span>
+                                <div class="label">Completed Tasks</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.tasks.failed }}</span>
+                                <div class="label">Failed Tasks</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-3">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.tasks.canceled }}</span>
+                                <div class="label">Canceled Tasks</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="mt-4">
+                    <canvas id="taskStatusChart" width="100%" height="200"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Playbook Metrics -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">Playbook Metrics</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.playbooks.generated }}</span>
+                                <div class="label">Generated</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.playbooks.linted }}</span>
+                                <div class="label">Linted</div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="col-md-4">
+                        <div class="card">
+                            <div class="card-body card-metric">
+                                <span class="value">{{ metrics.metrics.playbooks.tested }}</span>
+                                <div class="label">Tested</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                {% if feedback_stats %}
+                <div class="mt-4">
+                    <h6>Feedback Ratings</h6>
+                    <canvas id="feedbackChart" width="100%" height="200"></canvas>
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // Request by Endpoint Chart
+    const endpointData = {
+        {% for endpoint, count in request_stats.by_endpoint.items() %}
+        '{{ endpoint }}': {{ count }},
+        {% endfor %}
+    };
+    
+    const endpointLabels = Object.keys(endpointData).map(endpoint => {
+        if (endpoint.length > 20) {
+            return endpoint.substring(0, 17) + '...';
+        }
+        return endpoint;
+    });
+    
+    const endpointValues = Object.values(endpointData);
+    
+    const endpointCtx = document.getElementById('requestByEndpointChart').getContext('2d');
+    const endpointChart = new Chart(endpointCtx, {
+        type: 'bar',
+        data: {
+            labels: endpointLabels,
+            datasets: [{
+                label: 'Requests',
+                data: endpointValues,
+                backgroundColor: 'rgba(54, 162, 235, 0.5)',
+                borderColor: 'rgba(54, 162, 235, 1)',
+                borderWidth: 1
+            }]
+        },
+        options: {
+            indexAxis: 'y',
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false
+                }
+            },
+            scales: {
+                x: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    
+    // Request by Status Chart
+    const statusData = {
+        {% for status, count in request_stats.by_status.items() %}
+        '{{ status }}': {{ count }},
+        {% endfor %}
+    };
+    
+    const statusLabels = Object.keys(statusData);
+    const statusValues = Object.values(statusData);
+    const statusColors = statusLabels.map(status => {
+        if (status.startsWith('2')) return 'rgba(40, 167, 69, 0.8)';  // 2xx: success
+        if (status.startsWith('3')) return 'rgba(23, 162, 184, 0.8)'; // 3xx: redirection
+        if (status.startsWith('4')) return 'rgba(255, 193, 7, 0.8)';  // 4xx: client error
+        if (status.startsWith('5')) return 'rgba(220, 53, 69, 0.8)';  // 5xx: server error
+        return 'rgba(108, 117, 125, 0.8)';  // default
+    });
+    
+    const statusCtx = document.getElementById('requestByStatusChart').getContext('2d');
+    const statusChart = new Chart(statusCtx, {
+        type: 'pie',
+        data: {
+            labels: statusLabels,
+            datasets: [{
+                data: statusValues,
+                backgroundColor: statusColors,
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true
+        }
+    });
+    
+    // Task Status Chart
+    const taskData = {
+        'Created': {{ metrics.metrics.tasks.created }},
+        'Completed': {{ metrics.metrics.tasks.completed }},
+        'Failed': {{ metrics.metrics.tasks.failed }},
+        'Canceled': {{ metrics.metrics.tasks.canceled }}
+    };
+    
+    const taskCtx = document.getElementById('taskStatusChart').getContext('2d');
+    const taskChart = new Chart(taskCtx, {
+        type: 'doughnut',
+        data: {
+            labels: Object.keys(taskData),
+            datasets: [{
+                data: Object.values(taskData),
+                backgroundColor: [
+                    'rgba(108, 117, 125, 0.8)',  // Created
+                    'rgba(40, 167, 69, 0.8)',    // Completed
+                    'rgba(220, 53, 69, 0.8)',    // Failed
+                    'rgba(255, 193, 7, 0.8)'     // Canceled
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Task Status Distribution'
+                }
+            }
+        }
+    });
+    
+    {% if llm_stats %}
+    // LLM Provider Chart
+    const providerData = {
+        {% for provider in llm_stats.providers %}
+        '{{ provider.name }}': {{ provider.requests }},
+        {% endfor %}
+    };
+    
+    const providerCtx = document.getElementById('llmProviderChart').getContext('2d');
+    const providerChart = new Chart(providerCtx, {
+        type: 'pie',
+        data: {
+            labels: Object.keys(providerData),
+            datasets: [{
+                data: Object.values(providerData),
+                backgroundColor: [
+                    'rgba(75, 192, 192, 0.8)',
+                    'rgba(153, 102, 255, 0.8)',
+                    'rgba(255, 159, 64, 0.8)'
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'LLM Provider Usage'
+                }
+            }
+        }
+    });
+    {% endif %}
+    
+    {% if feedback_stats %}
+    // Feedback Ratings Chart
+    const feedbackData = {
+        {% for rating, count in feedback_stats.rating_counts.items() %}
+        '{{ rating }}': {{ count }},
+        {% endfor %}
+    };
+    
+    const feedbackCtx = document.getElementById('feedbackChart').getContext('2d');
+    const feedbackChart = new Chart(feedbackCtx, {
+        type: 'bar',
+        data: {
+            labels: Object.keys(feedbackData),
+            datasets: [{
+                label: 'Feedback Count',
+                data: Object.values(feedbackData),
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',  // 1 star
+                    'rgba(255, 159, 64, 0.8)',  // 2 stars
+                    'rgba(255, 205, 86, 0.8)',  // 3 stars
+                    'rgba(75, 192, 192, 0.8)',  // 4 stars
+                    'rgba(40, 167, 69, 0.8)'    // 5 stars
+                ],
+                borderWidth: 1
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                title: {
+                    display: true,
+                    text: 'Feedback Ratings Distribution'
+                }
+            },
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+    {% endif %}
+</script>
+{% endblock %}

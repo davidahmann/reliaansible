@@ -1,0 +1,8 @@
+---
+- name: Simulated playbook for ansible.builtin.copy
+  hosts: all
+  tasks:
+  - name: Restart the web service
+    ansible.builtin.copy:
+      path: /tmp/example
+      state: present

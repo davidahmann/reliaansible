@@ -1,0 +1,4 @@
+# Ignore problematic workflow files with colons in names
+.github:workflows:*
+workflows/.github:*
+*:*

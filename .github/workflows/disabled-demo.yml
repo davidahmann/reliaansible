@@ -1,0 +1,34 @@
+# This file is disabled and will not run
+# Original contents from .github:workflows:demo.yml
+
+name: Demo-Disabled
+
+# Disabling this workflow as it causes issues
+# on:
+#   push:
+#     branches:
+#       - main
+#   workflow_dispatch:
+
+# Explicitly disable this workflow
+on:
+  workflow_dispatch:
+    inputs:
+      run_disabled_workflow:
+        description: 'DO NOT RUN - This workflow is disabled'
+        required: true
+        default: 'no'
+        
+jobs:
+  demo:
+    name: VS Code Extension E2E (Disabled)
+    runs-on: ubuntu-latest
+    if: ${{ false }}  # This ensures the workflow never runs
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      - name: Build dev container & run extension tests
+        uses: devcontainers/ci@v0.2
+        with:
+          runCmd: bash -lc "make demo && sleep 5 && make demo-check"

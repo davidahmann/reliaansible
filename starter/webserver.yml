@@ -1,0 +1,27 @@
+# starter/webserver.yml
+- hosts: all
+  become: yes
+  tasks:
+    - name: Ensure latest package index
+      ansible.builtin.package:
+        name: nginx
+        state: present
+        update_cache: yes
+
+    - name: Enable and start Nginx service
+      ansible.builtin.service:
+        name: nginx
+        state: started
+        enabled: yes
+
+    - name: Copy custom index.html
+      ansible.builtin.copy:
+        content: |
+          <html>
+          <h1>Relia OSS Webserver Starter</h1>
+          <p>It works!</p>
+          </html>
+        dest: /usr/share/nginx/html/index.html
+        owner: root
+        group: root
+        mode: '0644'

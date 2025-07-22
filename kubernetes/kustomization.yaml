@@ -1,0 +1,43 @@
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
+
+resources:
+  - deployment.yaml
+  - service.yaml
+  - hpa.yaml
+  - networkpolicy.yaml
+
+# Namespace for all resources
+namespace: relia
+
+# Common labels for all resources
+commonLabels:
+  app: relia
+  environment: production
+
+# Custom configurations
+configMapGenerator:
+- name: relia-config
+  literals:
+  - RELIA_ENV=prod
+  - RELIA_ENFORCE_HTTPS=true
+  - RELIA_SECURE_COOKIES=true
+  - RELIA_HSTS_ENABLED=true
+  - RELIA_API_TIMEOUT=30
+  - RELIA_MONITORING_ENABLED=true
+
+# Patch resources to use the configMapGenerator
+patchesStrategicMerge:
+- |-
+  apiVersion: apps/v1
+  kind: Deployment
+  metadata:
+    name: relia-backend
+  spec:
+    template:
+      spec:
+        containers:
+        - name: backend
+          envFrom:
+          - configMapRef:
+              name: relia-config

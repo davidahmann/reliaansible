@@ -1,0 +1,200 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Overall Health -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Overall Health Status</h5>
+                
+                <div class="d-flex align-items-center mb-3">
+                    <div class="health-indicator health-{{ health.status }}"></div>
+                    <h3 class="mb-0">{{ health.status | capitalize }}</h3>
+                </div>
+                
+                <div class="mb-3">
+                    <span class="fw-bold">Timestamp:</span> {{ health.meta.timestamp }}
+                </div>
+                
+                <div class="alert alert-{{ 'success' if health.status == 'healthy' else 'warning' if health.status == 'degraded' else 'danger' }}" role="alert">
+                    {% if health.status == 'healthy' %}
+                    All systems are operating normally.
+                    {% elif health.status == 'degraded' %}
+                    Some components are experiencing issues but the system is still operational.
+                    {% else %}
+                    Critical components are experiencing issues. System functionality may be limited.
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Component Health Details -->
+<div class="row mb-4">
+    {% for component_name in component_keys %}
+    {% set component_data = health.components.get(component_name, {}) %}
+    <div class="col-md-6 mb-4">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">
+                    <div class="health-indicator health-{{ component_data.status }}"></div>
+                    {{ component_name | capitalize }}
+                </h5>
+                <span class="badge bg-{{ 'success' if component_data.status == 'healthy' else 'warning' if component_data.status == 'degraded' else 'danger' if component_data.status == 'unhealthy' else 'secondary' }}">
+                    {{ component_data.status | capitalize }}
+                </span>
+            </div>
+            <div class="card-body">
+                {% if component_data.details %}
+                <h6 class="card-subtitle mb-2 text-muted">Details</h6>
+                <ul class="list-group mb-3">
+                    {% for key, value in component_data.details.items() %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ key | replace('_', ' ') | capitalize }}
+                        <span class="badge bg-info">{{ value }}</span>
+                    </li>
+                    {% endfor %}
+                </ul>
+                {% endif %}
+                
+                {% if component_data.keys() | list | length > 2 %}
+                <h6 class="card-subtitle mb-2 text-muted">Metrics</h6>
+                <ul class="list-group">
+                    {% for key, value in component_data.items() %}
+                    {% if key not in ['status', 'details'] %}
+                    <li class="list-group-item d-flex justify-content-between align-items-center">
+                        {{ key | replace('_', ' ') | capitalize }}
+                        <span class="badge bg-secondary">{{ value }}</span>
+                    </li>
+                    {% endif %}
+                    {% endfor %}
+                </ul>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+
+<!-- System Resource Usage -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-header">
+                <h5 class="mb-0">System Resource Usage</h5>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <!-- CPU Usage -->
+                    <div class="col-md-4 mb-4">
+                        <h6 class="text-center">CPU Usage</h6>
+                        <canvas id="cpuChart" width="100%" height="200"></canvas>
+                    </div>
+                    
+                    <!-- Memory Usage -->
+                    <div class="col-md-4 mb-4">
+                        <h6 class="text-center">Memory Usage</h6>
+                        <canvas id="memoryChart" width="100%" height="200"></canvas>
+                    </div>
+                    
+                    <!-- Disk Usage -->
+                    <div class="col-md-4 mb-4">
+                        <h6 class="text-center">Disk Usage</h6>
+                        <canvas id="diskChart" width="100%" height="200"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // CPU Usage Chart
+    const cpuCtx = document.getElementById('cpuChart').getContext('2d');
+    const cpuChart = new Chart(cpuCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Used', 'Free'],
+            datasets: [{
+                data: [
+                    {{ health.components.system.cpu_percent if health.components.system.cpu_percent is defined else 0 }}, 
+                    {{ 100 - health.components.system.cpu_percent if health.components.system.cpu_percent is defined else 100 }}
+                ],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(211, 211, 211, 0.3)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    // Memory Usage Chart
+    const memoryCtx = document.getElementById('memoryChart').getContext('2d');
+    const memoryChart = new Chart(memoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Used', 'Free'],
+            datasets: [{
+                data: [
+                    {{ health.components.system.memory_percent if health.components.system.memory_percent is defined else 0 }}, 
+                    {{ 100 - health.components.system.memory_percent if health.components.system.memory_percent is defined else 100 }}
+                ],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(211, 211, 211, 0.3)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    // Disk Usage Chart (using storage component if available)
+    const diskCtx = document.getElementById('diskChart').getContext('2d');
+    const diskChart = new Chart(diskCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Used', 'Free'],
+            datasets: [{
+                data: [75, 25], // Default placeholder data
+                backgroundColor: [
+                    'rgba(255, 159, 64, 0.8)',
+                    'rgba(211, 211, 211, 0.3)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'bottom',
+                }
+            },
+            cutout: '70%'
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,547 @@
+{
+  "playbooks": [
+    {
+      "id": "513d8f67-8350-4036-a933-efe4c5a473d3",
+      "module": "ansible.builtin.file",
+      "prompt": "Create a configuration file",
+      "created_at": 1745362501.814091,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "ebb242f6-c1e5-4538-90de-7f2dc7b2618a",
+      "module": "ansible.builtin.copy",
+      "prompt": "Restart the web service",
+      "created_at": 1745362503.330863,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "aabc03c9-dfe1-48e1-b155-f2b8624af9c5",
+      "module": "ansible.builtin.service",
+      "prompt": "Create a new user account",
+      "created_at": 1745362505.860497,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "fb4ae6a4-8d2c-4a88-b340-72254fab09b1",
+      "module": "ansible.builtin.user",
+      "prompt": "Install required packages",
+      "created_at": 1745362507.378112,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "99099d52-dac7-4267-b3ef-9fcb21475e5b",
+      "module": "ansible.builtin.package",
+      "prompt": "Set file permissions",
+      "created_at": 1745362509.904175,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "8824f5fd-c401-4f13-b3e4-29475b235c2c",
+      "module": "ansible.builtin.file",
+      "prompt": "Create a configuration file",
+      "created_at": 1745362511.4220521,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "14524c17-693c-4505-afeb-27c5c09d5f0d",
+      "module": "ansible.builtin.copy",
+      "prompt": "Restart the web service",
+      "created_at": 1745362513.947089,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "9b9e520f-b83d-4270-a93f-117d929ad6d0",
+      "module": "ansible.builtin.service",
+      "prompt": "Create a new user account",
+      "created_at": 1745362515.4606888,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "f7dc278f-5478-4e74-957a-aef16020a22c",
+      "module": "ansible.builtin.user",
+      "prompt": "Install required packages",
+      "created_at": 1745362517.985482,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "0a3db0dd-acdc-4c62-924b-1739b6899589",
+      "module": "ansible.builtin.package",
+      "prompt": "Set file permissions",
+      "created_at": 1745362519.505564,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "f87a2a19-b6f7-4edb-bc08-9b14e80c6e0e",
+      "module": "ansible.builtin.file",
+      "prompt": "Create a configuration file",
+      "created_at": 1745363642.218507,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "41b41276-efa1-48a4-befe-9cadd552ab3a",
+      "module": "ansible.builtin.copy",
+      "prompt": "Restart the web service",
+      "created_at": 1745363643.7401521,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "98d65ef0-c51c-4031-a2af-281d59aaf7a5",
+      "module": "ansible.builtin.service",
+      "prompt": "Create a new user account",
+      "created_at": 1745363646.271009,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "7b179bda-36ec-4078-8e18-8953f2899aa0",
+      "module": "ansible.builtin.user",
+      "prompt": "Install required packages",
+      "created_at": 1745363647.790699,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "a1bdf606-949e-41d9-882a-edb0efebd4d0",
+      "module": "ansible.builtin.package",
+      "prompt": "Set file permissions",
+      "created_at": 1745363650.315736,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "4c74ef86-07de-47cb-8d9c-7ce9c764a541",
+      "module": "ansible.builtin.file",
+      "prompt": "Create a configuration file",
+      "created_at": 1745363651.8342028,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "cc3954a2-c545-4be0-9e4e-a8b24cf5439c",
+      "module": "ansible.builtin.copy",
+      "prompt": "Restart the web service",
+      "created_at": 1745363654.368243,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "7c056b7c-8745-47be-8d3f-27c76bdb053f",
+      "module": "ansible.builtin.service",
+      "prompt": "Create a new user account",
+      "created_at": 1745363655.891541,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "92943a69-4723-45ad-a5de-d853436a02a4",
+      "module": "ansible.builtin.user",
+      "prompt": "Install required packages",
+      "created_at": 1745363658.419328,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "e8c8c86e-23df-4e6e-b1ca-0cf906037e26",
+      "module": "ansible.builtin.package",
+      "prompt": "Set file permissions",
+      "created_at": 1745363659.942527,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "482fd687-8da2-449b-b6bb-cece088dd63a",
+      "module": "ansible.builtin.file",
+      "prompt": "Create a configuration file",
+      "created_at": 1745365571.6189141,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "63261a61-dcb1-4ed5-aa14-26519d58b875",
+      "module": "ansible.builtin.copy",
+      "prompt": "Restart the web service",
+      "created_at": 1745365573.159061,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "ef23a80e-661b-4e81-8835-d89767e94e88",
+      "module": "ansible.builtin.service",
+      "prompt": "Create a new user account",
+      "created_at": 1745365575.710036,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "ecddada5-bb83-4b1a-9c6c-64bad7e51ac1",
+      "module": "ansible.builtin.user",
+      "prompt": "Install required packages",
+      "created_at": 1745365577.248801,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "6e3ab371-8334-4c07-b36b-95f9fc66487f",
+      "module": "ansible.builtin.package",
+      "prompt": "Set file permissions",
+      "created_at": 1745365579.781923,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "d2136664-c658-4298-bfd7-1e334f8afe56",
+      "module": "ansible.builtin.file",
+      "prompt": "Create a configuration file",
+      "created_at": 1745365581.315549,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "b92e8591-dc2b-460e-82b2-47ad2e1ac158",
+      "module": "ansible.builtin.copy",
+      "prompt": "Restart the web service",
+      "created_at": 1745365583.857761,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "d4985122-e76c-4474-93b2-09d5178d5a8d",
+      "module": "ansible.builtin.service",
+      "prompt": "Create a new user account",
+      "created_at": 1745365585.390461,
+      "status": "tested_failed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest failed\n"
+    },
+    {
+      "id": "88120903-cbff-4fe6-a026-0c81afd2dd77",
+      "module": "ansible.builtin.user",
+      "prompt": "Install required packages",
+      "created_at": 1745365587.945468,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    },
+    {
+      "id": "7ef191ee-46f9-4fbf-adee-4141a54e073e",
+      "module": "ansible.builtin.package",
+      "prompt": "Set file permissions",
+      "created_at": 1745365589.469783,
+      "status": "tested_passed",
+      "lint_errors": [
+        "yaml[indentation]: Too many spaces before comment"
+      ],
+      "test_logs": "Started molecule test\nRunning scenario 'default'\nVerifying playbook syntax...\nApplying playbook...\nTest succeeded\n"
+    }
+  ],
+  "telemetry": [],
+  "feedback": [
+    {
+      "id": "984a8ab1-fa1c-4ccd-81e7-1951eafff005",
+      "playbook_id": "513d8f67-8350-4036-a933-efe4c5a473d3",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362502.823812
+    },
+    {
+      "id": "8a7fb51d-24f9-41e0-94d9-5864fee4ce0f",
+      "playbook_id": "ebb242f6-c1e5-4538-90de-7f2dc7b2618a",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362504.3454661
+    },
+    {
+      "id": "9e25c212-da8a-4aa3-97d0-6f626a2129a7",
+      "playbook_id": "aabc03c9-dfe1-48e1-b155-f2b8624af9c5",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362506.8733969
+    },
+    {
+      "id": "866c5f88-ebde-4fff-82f1-5922ac0d8304",
+      "playbook_id": "fb4ae6a4-8d2c-4a88-b340-72254fab09b1",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362508.388871
+    },
+    {
+      "id": "1be27032-8b78-48e8-9c98-7c91cc66b27d",
+      "playbook_id": "99099d52-dac7-4267-b3ef-9fcb21475e5b",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362510.9148412
+    },
+    {
+      "id": "f1b3f4bc-703e-4dd5-8ed4-297a84cab790",
+      "playbook_id": "8824f5fd-c401-4f13-b3e4-29475b235c2c",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362512.434915
+    },
+    {
+      "id": "70a9207a-6485-4860-9c93-fdfab4369f4b",
+      "playbook_id": "14524c17-693c-4505-afeb-27c5c09d5f0d",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362514.954192
+    },
+    {
+      "id": "5b26e19d-4e6b-4b45-ba95-0dd9af3240ce",
+      "playbook_id": "9b9e520f-b83d-4270-a93f-117d929ad6d0",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362516.470913
+    },
+    {
+      "id": "52e0ce30-4297-484e-85dd-682a7e8dc68b",
+      "playbook_id": "f7dc278f-5478-4e74-957a-aef16020a22c",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362518.999566
+    },
+    {
+      "id": "cfdff6b8-4f02-41ad-946e-791bd5ed5cfa",
+      "playbook_id": "0a3db0dd-acdc-4c62-924b-1739b6899589",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745362520.521009
+    },
+    {
+      "id": "2356145b-84eb-43e7-b4fc-993614c626e5",
+      "playbook_id": "f87a2a19-b6f7-4edb-bc08-9b14e80c6e0e",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363643.233432
+    },
+    {
+      "id": "4b6ccfde-0175-4e5a-82eb-bae5dafd6f14",
+      "playbook_id": "41b41276-efa1-48a4-befe-9cadd552ab3a",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363644.7539861
+    },
+    {
+      "id": "baca195f-898a-40eb-9145-0487034879a1",
+      "playbook_id": "98d65ef0-c51c-4031-a2af-281d59aaf7a5",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363647.282866
+    },
+    {
+      "id": "c49e5931-e30f-4406-a69d-2a8b5457cb63",
+      "playbook_id": "7b179bda-36ec-4078-8e18-8953f2899aa0",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363648.8036091
+    },
+    {
+      "id": "62412e4c-6170-4c37-9378-bdf17b2dfe85",
+      "playbook_id": "a1bdf606-949e-41d9-882a-edb0efebd4d0",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363651.3299809
+    },
+    {
+      "id": "bce5d7bd-d211-4610-8c56-6aeb32441dfb",
+      "playbook_id": "4c74ef86-07de-47cb-8d9c-7ce9c764a541",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363652.851975
+    },
+    {
+      "id": "d99d3031-bd61-46cd-a30a-e86bc08006e3",
+      "playbook_id": "cc3954a2-c545-4be0-9e4e-a8b24cf5439c",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363655.3848152
+    },
+    {
+      "id": "ad176e8c-65ee-4cba-b3ed-4a5e86b6dac5",
+      "playbook_id": "7c056b7c-8745-47be-8d3f-27c76bdb053f",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363656.908596
+    },
+    {
+      "id": "112629d3-1904-4a8b-88c5-8e2f90c3d6c5",
+      "playbook_id": "92943a69-4723-45ad-a5de-d853436a02a4",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363659.434628
+    },
+    {
+      "id": "622ce186-3d3c-41eb-a3d8-4f7951750e49",
+      "playbook_id": "e8c8c86e-23df-4e6e-b1ca-0cf906037e26",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745363660.958533
+    },
+    {
+      "id": "5a56f2ee-f181-44f6-a8ba-dbc4bf975a81",
+      "playbook_id": "482fd687-8da2-449b-b6bb-cece088dd63a",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365572.646293
+    },
+    {
+      "id": "c341e161-9bfb-488d-a74f-4a72ff73092a",
+      "playbook_id": "63261a61-dcb1-4ed5-aa14-26519d58b875",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365574.186188
+    },
+    {
+      "id": "462acbbd-d1ad-469e-aa26-969d91c8a084",
+      "playbook_id": "ef23a80e-661b-4e81-8835-d89767e94e88",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365576.736078
+    },
+    {
+      "id": "493225e5-0a83-4d54-bf48-72b93a48e4da",
+      "playbook_id": "ecddada5-bb83-4b1a-9c6c-64bad7e51ac1",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365578.262326
+    },
+    {
+      "id": "62f0200f-6c87-4388-961f-f6a7a1f7e49c",
+      "playbook_id": "6e3ab371-8334-4c07-b36b-95f9fc66487f",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365580.802479
+    },
+    {
+      "id": "10e4e8be-0a04-47be-808c-ec6280e67f85",
+      "playbook_id": "d2136664-c658-4298-bfd7-1e334f8afe56",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365582.333226
+    },
+    {
+      "id": "6d61cb46-90f0-4a45-aff7-d192b445631e",
+      "playbook_id": "b92e8591-dc2b-460e-82b2-47ad2e1ac158",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365584.88499
+    },
+    {
+      "id": "ce764205-8dfb-4c2e-b2c8-24dd02f30db0",
+      "playbook_id": "d4985122-e76c-4474-93b2-09d5178d5a8d",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365586.4207869
+    },
+    {
+      "id": "63c789aa-7f5f-411b-970e-2971a02f9347",
+      "playbook_id": "88120903-cbff-4fe6-a026-0c81afd2dd77",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365588.957224
+    },
+    {
+      "id": "45bb862e-0955-4e92-85d1-785e8f9995f2",
+      "playbook_id": "7ef191ee-46f9-4fbf-adee-4141a54e073e",
+      "rating": 3,
+      "comment": "Generated as expected",
+      "created_at": 1745365590.496508
+    }
+  ]
+}

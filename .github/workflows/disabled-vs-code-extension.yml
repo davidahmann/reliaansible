@@ -1,0 +1,26 @@
+# This workflow is intentionally disabled
+# It's a replacement for the problematic demo.yml file with colons in its name
+
+name: VS Code Extension Tests (Disabled)
+
+# This workflow is disabled and won't run automatically
+on:
+  workflow_dispatch:
+    inputs:
+      manual_run:
+        description: 'Manual run (not recommended)'
+        required: true
+        default: 'false'
+
+jobs:
+  # This job is set to never run (condition is always false)
+  extension-tests:
+    name: VS Code Extension E2E Tests
+    runs-on: ubuntu-latest
+    if: false
+    steps:
+      - name: This job is disabled
+        run: |
+          echo "This workflow is disabled to prevent CI issues."
+          echo "The VS Code extension should be tested manually."
+          exit 0

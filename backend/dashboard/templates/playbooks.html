@@ -1,0 +1,341 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Playbooks Header -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body d-flex justify-content-between align-items-center">
+                <div>
+                    <h5 class="mb-0">Generated Playbooks</h5>
+                    <p class="text-muted mb-0">Total: {{ playbooks|length }} {{ "playbooks" if playbooks|length != 1 else "playbook" }}</p>
+                </div>
+                
+                <div class="btn-group" role="group">
+                    <a href="/dashboard/playbooks?limit=50" class="btn btn-{{ 'secondary' if limit == 50 else 'outline-secondary' }}">
+                        50
+                    </a>
+                    <a href="/dashboard/playbooks?limit=100" class="btn btn-{{ 'secondary' if limit == 100 else 'outline-secondary' }}">
+                        100
+                    </a>
+                    <a href="/dashboard/playbooks?limit=500" class="btn btn-{{ 'secondary' if limit == 500 else 'outline-secondary' }}">
+                        500
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Playbooks Table -->
+<div class="row">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                {% if playbooks %}
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Created</th>
+                                <th>Module</th>
+                                <th>Size</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for playbook in playbooks %}
+                            <tr>
+                                <td>{{ playbook.id }}</td>
+                                <td>{{ playbook.created_at }}</td>
+                                <td>
+                                    {% if playbook.module %}
+                                    <span class="badge bg-info">{{ playbook.module }}</span>
+                                    {% else %}
+                                    <span class="badge bg-secondary">Unknown</span>
+                                    {% endif %}
+                                </td>
+                                <td>{{ playbook.size|default(0)|filesizeformat }}</td>
+                                <td>
+                                    <div class="btn-group btn-group-sm" role="group">
+                                        <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#viewPlaybookModal" data-playbook-id="{{ playbook.id }}">
+                                            <i class="bi bi-eye"></i> View
+                                        </button>
+                                        <button type="button" class="btn btn-outline-success" data-bs-toggle="modal" data-bs-target="#lintPlaybookModal" data-playbook-id="{{ playbook.id }}">
+                                            <i class="bi bi-check2-square"></i> Lint
+                                        </button>
+                                        <button type="button" class="btn btn-outline-info" data-bs-toggle="modal" data-bs-target="#testPlaybookModal" data-playbook-id="{{ playbook.id }}">
+                                            <i class="bi bi-play"></i> Test
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+                {% else %}
+                <div class="alert alert-info">
+                    No playbooks have been generated yet.
+                </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- View Playbook Modal -->
+<div class="modal fade" id="viewPlaybookModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">View Playbook</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <div class="mb-3">
+                    <label class="form-label">Playbook ID</label>
+                    <input type="text" class="form-control" id="playbook-id-display" readonly>
+                </div>
+                <div class="mb-3">
+                    <label class="form-label">YAML Content</label>
+                    <pre><code id="playbook-content" class="language-yaml"></code></pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Lint Playbook Modal -->
+<div class="modal fade" id="lintPlaybookModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Lint Playbook</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Lint playbook with ID: <strong id="lint-playbook-id"></strong></p>
+                <div class="alert alert-info" id="lint-loading" style="display: none;">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Linting playbook...
+                </div>
+                <div id="lint-results" style="display: none;">
+                    <h6>Results:</h6>
+                    <pre><code id="lint-results-content"></code></pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="lint-submit-btn">Lint</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Test Playbook Modal -->
+<div class="modal fade" id="testPlaybookModal" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Test Playbook</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p>Run test for playbook with ID: <strong id="test-playbook-id"></strong></p>
+                <p class="text-muted">This will run a Molecule test in a Docker container. It may take a few minutes.</p>
+                <div class="alert alert-info" id="test-loading" style="display: none;">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="visually-hidden">Loading...</span>
+                    </div>
+                    Testing playbook... This may take a while.
+                </div>
+                <div id="test-results" style="display: none;">
+                    <h6>Status: <span id="test-status"></span></h6>
+                    <h6>Test Logs:</h6>
+                    <pre><code id="test-results-content"></code></pre>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                <button type="button" class="btn btn-primary" id="test-submit-btn">Test</button>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // View Playbook Modal
+    const viewPlaybookModal = document.getElementById('viewPlaybookModal');
+    viewPlaybookModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const playbookId = button.getAttribute('data-playbook-id');
+        
+        // Set playbook ID in the modal
+        document.getElementById('playbook-id-display').value = playbookId;
+        
+        // Fetch playbook content (mock for now)
+        fetch(`/api/playbooks/${playbookId}`)
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error('Playbook not found');
+                }
+                return response.json();
+            })
+            .then(data => {
+                document.getElementById('playbook-content').textContent = data.content;
+            })
+            .catch(error => {
+                document.getElementById('playbook-content').textContent = 'Could not load playbook content.\n\nMock playbook content for demo purposes:\n\n---\n- name: Sample Playbook\n  hosts: all\n  tasks:\n    - name: Ensure package is installed\n      ansible.builtin.package:\n        name: nginx\n        state: present';
+            });
+    });
+    
+    // Lint Playbook Modal
+    const lintPlaybookModal = document.getElementById('lintPlaybookModal');
+    lintPlaybookModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const playbookId = button.getAttribute('data-playbook-id');
+        
+        // Set playbook ID in the modal
+        document.getElementById('lint-playbook-id').textContent = playbookId;
+        
+        // Reset UI
+        document.getElementById('lint-loading').style.display = 'none';
+        document.getElementById('lint-results').style.display = 'none';
+        document.getElementById('lint-submit-btn').disabled = false;
+    });
+    
+    // Lint Submit Button
+    document.getElementById('lint-submit-btn').addEventListener('click', () => {
+        const playbookId = document.getElementById('lint-playbook-id').textContent;
+        
+        // Show loading
+        document.getElementById('lint-loading').style.display = 'block';
+        document.getElementById('lint-results').style.display = 'none';
+        document.getElementById('lint-submit-btn').disabled = true;
+        
+        // Mock API call for linting
+        setTimeout(() => {
+            // Hide loading
+            document.getElementById('lint-loading').style.display = 'none';
+            
+            // Show results
+            document.getElementById('lint-results').style.display = 'block';
+            document.getElementById('lint-results-content').textContent = 'No linting errors found.';
+            
+            // Re-enable button
+            document.getElementById('lint-submit-btn').disabled = false;
+        }, 1500);
+        
+        // Real API call would be:
+        // fetch(`/lint`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ playbook_id: playbookId }),
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     // Hide loading
+        //     document.getElementById('lint-loading').style.display = 'none';
+        //     
+        //     // Show results
+        //     document.getElementById('lint-results').style.display = 'block';
+        //     document.getElementById('lint-results-content').textContent = 
+        //         data.errors.length === 0 ? 'No linting errors found.' : data.errors.join('\n');
+        //     
+        //     // Re-enable button
+        //     document.getElementById('lint-submit-btn').disabled = false;
+        // })
+        // .catch(error => {
+        //     // Handle error
+        //     document.getElementById('lint-loading').style.display = 'none';
+        //     document.getElementById('lint-results').style.display = 'block';
+        //     document.getElementById('lint-results-content').textContent = `Error: ${error.message}`;
+        //     document.getElementById('lint-submit-btn').disabled = false;
+        // });
+    });
+    
+    // Test Playbook Modal
+    const testPlaybookModal = document.getElementById('testPlaybookModal');
+    testPlaybookModal.addEventListener('show.bs.modal', event => {
+        const button = event.relatedTarget;
+        const playbookId = button.getAttribute('data-playbook-id');
+        
+        // Set playbook ID in the modal
+        document.getElementById('test-playbook-id').textContent = playbookId;
+        
+        // Reset UI
+        document.getElementById('test-loading').style.display = 'none';
+        document.getElementById('test-results').style.display = 'none';
+        document.getElementById('test-submit-btn').disabled = false;
+    });
+    
+    // Test Submit Button
+    document.getElementById('test-submit-btn').addEventListener('click', () => {
+        const playbookId = document.getElementById('test-playbook-id').textContent;
+        
+        // Show loading
+        document.getElementById('test-loading').style.display = 'block';
+        document.getElementById('test-results').style.display = 'none';
+        document.getElementById('test-submit-btn').disabled = true;
+        
+        // Mock API call for testing
+        setTimeout(() => {
+            // Hide loading
+            document.getElementById('test-loading').style.display = 'none';
+            
+            // Show results
+            document.getElementById('test-results').style.display = 'block';
+            document.getElementById('test-status').textContent = 'PASSED';
+            document.getElementById('test-status').className = 'badge bg-success';
+            document.getElementById('test-results-content').textContent = 'Test completed successfully.\n\nMolecule execution completed successfully.';
+            
+            // Re-enable button
+            document.getElementById('test-submit-btn').disabled = false;
+        }, 3000);
+        
+        // Real API call would be:
+        // fetch(`/test`, {
+        //     method: 'POST',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //     },
+        //     body: JSON.stringify({ playbook_id: playbookId }),
+        // })
+        // .then(response => response.json())
+        // .then(data => {
+        //     // Hide loading
+        //     document.getElementById('test-loading').style.display = 'none';
+        //     
+        //     // Show results
+        //     document.getElementById('test-results').style.display = 'block';
+        //     document.getElementById('test-status').textContent = data.status.toUpperCase();
+        //     document.getElementById('test-status').className = 
+        //         data.status === 'passed' ? 'badge bg-success' : 'badge bg-danger';
+        //     document.getElementById('test-results-content').textContent = data.logs;
+        //     
+        //     // Re-enable button
+        //     document.getElementById('test-submit-btn').disabled = false;
+        // })
+        // .catch(error => {
+        //     // Handle error
+        //     document.getElementById('test-loading').style.display = 'none';
+        //     document.getElementById('test-results').style.display = 'block';
+        //     document.getElementById('test-status').textContent = 'ERROR';
+        //     document.getElementById('test-status').className = 'badge bg-danger';
+        //     document.getElementById('test-results-content').textContent = `Error: ${error.message}`;
+        //     document.getElementById('test-submit-btn').disabled = false;
+        // });
+    });
+</script>
+{% endblock %}

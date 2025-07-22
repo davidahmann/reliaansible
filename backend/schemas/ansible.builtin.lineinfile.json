@@ -1,0 +1,30 @@
+{
+  "module": "ansible.builtin.lineinfile",
+  "options": {
+    "path": {
+      "type": "str",
+      "required": true,
+      "description": "Path to the file to modify."
+    },
+    "line": {
+      "type": "str",
+      "required": true,
+      "description": "The line to ensure is in the file."
+    },
+    "state": {
+      "type": "str",
+      "choices": ["present", "absent"],
+      "default": "present",
+      "description": "Whether the line should be present or absent."
+    },
+    "regexp": {
+      "type": "str",
+      "description": "A regular expression to search for."
+    },
+    "insertafter": {
+      "type": "str",
+      "choices": ["BOF", "EOF"],
+      "description": "Where to insert the line after (Beginning or End of file)."
+    }
+  }
+}

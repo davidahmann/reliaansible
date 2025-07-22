@@ -1,0 +1,7 @@
+# CI-specific gitignore to exclude problematic paths
+.devcontainer/
+.devcontainer
+/.devcontainer/
+**/.devcontainer/**
+**/devcontainer.*
+**/.devcontainer:*

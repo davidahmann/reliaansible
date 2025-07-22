@@ -1,0 +1,8 @@
+---
+- name: Simulated playbook for ansible.builtin.file
+  hosts: all
+  tasks:
+  - name: Create a configuration file
+    ansible.builtin.file:
+      path: /tmp/example
+      state: present

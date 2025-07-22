@@ -1,0 +1,8 @@
+---
+- name: Simulated playbook for ansible.builtin.package
+  hosts: all
+  tasks:
+  - name: Set file permissions
+    ansible.builtin.package:
+      path: /tmp/example
+      state: present

@@ -1,0 +1,257 @@
+{% extends "base.html" %}
+
+{% block content %}
+<!-- Health Status -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">System Health</h5>
+                
+                <div class="d-flex align-items-center mb-3">
+                    <div class="health-indicator health-{{ health.status }}"></div>
+                    <h3 class="mb-0">{{ health.status | capitalize }}</h3>
+                </div>
+                
+                <div class="row">
+                    {% for component_name, component_data in health.components.items() %}
+                    <div class="col-md-2 mb-3">
+                        <div class="card">
+                            <div class="card-body p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <div>
+                                        <div class="health-indicator health-{{ component_data.status }}"></div>
+                                        <span>{{ component_name | capitalize }}</span>
+                                    </div>
+                                    <span class="badge bg-light text-dark">{{ component_data.status }}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Overview -->
+<div class="row mb-4">
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body card-metric">
+                <span class="value">{{ uptime }}</span>
+                <div class="label">Uptime</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body card-metric">
+                <span class="value">{{ metrics.metrics.requests.total }}</span>
+                <div class="label">Total Requests</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body card-metric">
+                <span class="value">{{ "%.2f"|format(metrics.requests_per_minute) }}</span>
+                <div class="label">Requests/Minute</div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-3">
+        <div class="card">
+            <div class="card-body card-metric">
+                <span class="value">{{ system_info.cpu_count }}</span>
+                <div class="label">CPU Cores</div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Resource Usage -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">CPU Usage</h5>
+                <canvas id="cpuChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Memory Usage</h5>
+                <canvas id="memoryChart" width="400" height="200"></canvas>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Request Statistics -->
+<div class="row mb-4">
+    <div class="col-md-12">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Request Statistics</h5>
+                <div class="table-responsive">
+                    <table class="table table-sm">
+                        <thead>
+                            <tr>
+                                <th>Endpoint</th>
+                                <th>Count</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for endpoint, count in metrics.metrics.requests.by_endpoint.items() %}
+                            <tr>
+                                <td>{{ endpoint }}</td>
+                                <td>{{ count }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- System Information -->
+<div class="row mb-4">
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">System Information</h5>
+                <table class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th>Hostname</th>
+                            <td>{{ system_info.hostname }}</td>
+                        </tr>
+                        <tr>
+                            <th>Platform</th>
+                            <td>{{ system_info.platform }}</td>
+                        </tr>
+                        <tr>
+                            <th>Python Version</th>
+                            <td>{{ system_info.python_version }}</td>
+                        </tr>
+                        <tr>
+                            <th>CPU</th>
+                            <td>{{ system_info.cpu_model }}</td>
+                        </tr>
+                        <tr>
+                            <th>Boot Time</th>
+                            <td>{{ system_info.boot_time }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-md-6">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">Process Information</h5>
+                <table class="table table-sm">
+                    <tbody>
+                        <tr>
+                            <th>Process ID</th>
+                            <td>{{ system_info.process_id }}</td>
+                        </tr>
+                        <tr>
+                            <th>Process Start Time</th>
+                            <td>{{ system_info.process_start_time }}</td>
+                        </tr>
+                        <tr>
+                            <th>CPU Usage</th>
+                            <td>{{ metrics.process.cpu_percent }}%</td>
+                        </tr>
+                        <tr>
+                            <th>Memory Usage</th>
+                            <td>{{ (metrics.process.memory_rss / 1024 / 1024) | round(2) }} MB</td>
+                        </tr>
+                        <tr>
+                            <th>Threads</th>
+                            <td>{{ metrics.process.threads }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    // CPU Usage Chart
+    const cpuCtx = document.getElementById('cpuChart').getContext('2d');
+    const cpuChart = new Chart(cpuCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Used', 'Free'],
+            datasets: [{
+                data: [{{ metrics.system.cpu.percent }}, {{ 100 - metrics.system.cpu.percent }}],
+                backgroundColor: [
+                    'rgba(54, 162, 235, 0.8)',
+                    'rgba(211, 211, 211, 0.3)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: '{{ metrics.system.cpu.percent }}% Used'
+                }
+            },
+            cutout: '70%'
+        }
+    });
+
+    // Memory Usage Chart
+    const memoryCtx = document.getElementById('memoryChart').getContext('2d');
+    const memoryChart = new Chart(memoryCtx, {
+        type: 'doughnut',
+        data: {
+            labels: ['Used', 'Free'],
+            datasets: [{
+                data: [{{ metrics.system.memory.percent }}, {{ 100 - metrics.system.memory.percent }}],
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.8)',
+                    'rgba(211, 211, 211, 0.3)'
+                ],
+                borderWidth: 0
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    position: 'right',
+                },
+                title: {
+                    display: true,
+                    text: '{{ metrics.system.memory.percent }}% Used ({{ (metrics.system.memory.used / 1024 / 1024 / 1024) | round(2) }} GB / {{ (metrics.system.memory.total / 1024 / 1024 / 1024) | round(2) }} GB)'
+                }
+            },
+            cutout: '70%'
+        }
+    });
+</script>
+{% endblock %}

@@ -1,0 +1,13 @@
+
+# Ignore problematic files with colons
+**/*:*
+.github/workflows/.github:*
+
+# VS Code Extension specific
+extension/node_modules/
+extension/out/
+extension/*.vsix
+
+# OS specific files
+.DS_Store
+**/.DS_Store

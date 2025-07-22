@@ -1,0 +1,8 @@
+---
+- name: Simulated playbook for ansible.builtin.service
+  hosts: all
+  tasks:
+  - name: Create a new user account
+    ansible.builtin.service:
+      path: /tmp/example
+      state: present
